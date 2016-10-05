@@ -1,20 +1,15 @@
 import { connect } from 'react-redux';
 import PokemonDetail from './pokemon_detail';
-import { requestOnePokemon } from '../../actions/pokemon_actions';
 import { allToys } from '../../reducers/selector';
+import { selectDetail } from '../../reducers/selector';
 
 const mapStateToProps = state => ({
-  pokemon: state.pokemon,
-  toys: allToys(state)
-});
-
-const mapDispatchToProps = dispatch => ({
-  requestOnePokemon: (pokemon) => dispatch(requestOnePokemon(pokemon))
+  pokemonDetail: selectDetail(state.pokemonDetail),
+  toys: allToys(state.pokemonDetail)
 });
 
 const PokemonDetailContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(PokemonDetail);
 
 export default PokemonDetailContainer;

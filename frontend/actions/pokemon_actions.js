@@ -19,7 +19,7 @@ export const receiveOnePokemon = (pokemon) => ({
   pokemon
 });
 
-export const requestOnePokemon = (pokemon) => ({
+export const requestOnePokemon = (id) => ({
   type: PokemonConstants.REQUEST_ONE_POKEMON,
-  pokemon: pokemon.id
+  id
 });
