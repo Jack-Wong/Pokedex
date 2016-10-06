@@ -9,6 +9,8 @@ const PokemonReducer = (state={}, action) => {
       return merge({}, state);
     case PokemonConstants.RECEIVE_ONE_POKEMON:
       return merge({}, state, {pokemonDetail: action.pokemon});
+    case PokemonConstants.RECEIVE_NEW_POKEMON:
+      return merge({}, state, {pokemonDetail: action.pokemon, pokemon: [...state.pokemon, action.pokemon]});
     default:
       return state
   }

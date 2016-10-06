@@ -22348,6 +22348,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
 	var PokemonReducer = function PokemonReducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
@@ -22359,6 +22361,8 @@
 	      return (0, _merge2.default)({}, state);
 	    case _pokemon_actions.PokemonConstants.RECEIVE_ONE_POKEMON:
 	      return (0, _merge2.default)({}, state, { pokemonDetail: action.pokemon });
+	    case _pokemon_actions.PokemonConstants.RECEIVE_NEW_POKEMON:
+	      return (0, _merge2.default)({}, state, { pokemonDetail: action.pokemon, pokemon: [].concat(_toConsumableArray(state.pokemon), [action.pokemon]) });
 	    default:
 	      return state;
 	  }
@@ -22379,7 +22383,9 @@
 	  RECEIVE_ALL_POKEMON: "RECEIVE_ALL_POKEMON",
 	  REQUEST_ALL_POKEMON: "REQUEST_ALL_POKEMON",
 	  RECEIVE_ONE_POKEMON: "RECEIVE_ONE_POKEMON",
-	  REQUEST_ONE_POKEMON: "REQUEST_ONE_POKEMON"
+	  REQUEST_ONE_POKEMON: "REQUEST_ONE_POKEMON",
+	  CREATE_POKEMON: "CREATE_POKEMON",
+	  RECEIVE_NEW_POKEMON: "RECEIVE__NEW_POKEMON"
 	};
 	
 	var receiveAllPokemon = exports.receiveAllPokemon = function receiveAllPokemon(pokemon) {
@@ -22406,6 +22412,20 @@
 	  return {
 	    type: PokemonConstants.REQUEST_ONE_POKEMON,
 	    id: id
+	  };
+	};
+	
+	var createPokemon = exports.createPokemon = function createPokemon(pokemon) {
+	  return {
+	    type: PokemonConstants.CREATE_POKEMON,
+	    pokemon: pokemon
+	  };
+	};
+	
+	var receiveNewPokemon = exports.receiveNewPokemon = function receiveNewPokemon(pokemon) {
+	  return {
+	    type: PokemonConstants.RECEIVE_NEW_POKEMON,
+	    pokemon: pokemon
 	  };
 	};
 
@@ -26029,6 +26049,13 @@
 	          (0, _api_util.fetchOnePokemon)(action.id, success);
 	          next(action);
 	          break;
+	        case _pokemon_actions.PokemonConstants.CREATE_POKEMON:
+	          success = function success(data) {
+	            return dispatch((0, _pokemon_actions.receiveNewPokemon)(data));
+	          };
+	          (0, _api_util.createPokemon)(action.pokemon, success);
+	          next(action);
+	          break;
 	        default:
 	          next(action);
 	      }
@@ -26059,6 +26086,15 @@
 	  $.ajax({
 	    method: 'GET',
 	    url: 'api/pokemon/' + id,
+	    success: success
+	  });
+	};
+	
+	var createPokemon = exports.createPokemon = function createPokemon(pokemon, success) {
+	  $.ajax({
+	    method: 'POST',
+	    url: 'api/pokemon/',
+	    data: { pokemon: pokemon },
 	    success: success
 	  });
 	};
