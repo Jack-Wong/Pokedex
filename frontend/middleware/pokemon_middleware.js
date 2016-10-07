@@ -3,8 +3,9 @@ import { fetchAllPokemon } from '../util/api_util';
 import { fetchOnePokemon } from '../util/api_util';
 import { receiveAllPokemon } from '../actions/pokemon_actions';
 import { receiveOnePokemon } from '../actions/pokemon_actions';
-import { createPokemon } from '../util/api_util';
+import { postPokemon } from '../util/api_util';
 import { receiveNewPokemon } from '../actions/pokemon_actions';
+import { hashHistory } from 'react-router';
 
 const PokemonMiddleware = ({dispatch}) => next => action => {
   switch(action.type){
@@ -19,8 +20,11 @@ const PokemonMiddleware = ({dispatch}) => next => action => {
       next(action);
       break;
     case PokemonConstants.CREATE_POKEMON:
-      success = data => dispatch(receiveNewPokemon(data));
-      createPokemon(action.pokemon, success);
+      success = data => {
+        dispatch(receiveNewPokemon(data));
+        hashHistory.push('/pokemon/' + data.id);
+      };
+      postPokemon(action.pokemon, success);
       next(action);
       break;
     default:

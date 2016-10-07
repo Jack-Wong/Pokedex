@@ -7,7 +7,7 @@ const store = configureStore();
 window.store = store
 
 document.addEventListener('DOMContentLoaded', () => {
-  const store = configureStore();
+  const store = configureStore(window.pokemonTypes);
   const root = document.getElementById('root');
   ReactDom.render(<Root store={store} />, root);
 });
